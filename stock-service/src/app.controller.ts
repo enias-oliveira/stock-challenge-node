@@ -1,19 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { StooqService } from './stooq/stooq.service';
+
 
 @Controller()
 export class AppController {
-  constructor() { }
+  constructor(private stooqService: StooqService) { }
 
   @MessagePattern({ cmd: 'get_stock' })
-  getStock(_quote: string): any {
-    return {
-      "name": "APPLE",
-      "symbol": "AAPL.US",
-      "open": 123.66,
-      "high": 123.66,
-      "low": 122.49,
-      "close": 123
-    }
+  getStock(quote: string) {
+    return this.stooqService.fetchStock(quote)
   }
 }
