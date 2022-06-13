@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -33,23 +33,27 @@ export class UsersService {
     });
   }
 
-  async createUser(data: Omit<Prisma.UserCreateInput, "passwordHash">): Promise<{ email: string, password: string }> {
-    const password = generator.generate({ length: 32 })
-    const passwordHash = bcrypt.hashSync(password, 10)
+  async createUser(
+    data: Omit<Prisma.UserCreateInput, 'passwordHash'>,
+  ): Promise<{ email: string; password: string }> {
+    const password = generator.generate({ length: 32 });
+    const passwordHash = bcrypt.hashSync(password, 10);
 
     try {
       const { email } = await this.prisma.user.create({
-        data: { ...data, passwordHash }
+        data: { ...data, passwordHash },
       });
 
-      return { email, password }
-
+      return { email, password };
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new HttpException('This email is already in use. Please use another one', HttpStatus.BAD_REQUEST)
+        throw new HttpException(
+          'This email is already in use. Please use another one',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
-      throw err
+      throw err;
     }
   }
 

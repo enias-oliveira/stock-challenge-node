@@ -6,9 +6,14 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, ConfigModule.forRoot({ isGlobal: true }),
-    ClientsModule.register([{ name: 'STOCK_SERVICE', transport: Transport.TCP }])
+  imports: [
+    UsersModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    ClientsModule.register([
+      { name: 'STOCK_SERVICE', transport: Transport.TCP },
+    ]),
   ],
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}

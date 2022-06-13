@@ -1,6 +1,11 @@
-import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { Prisma, UserRole } from '@prisma/client';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import {
+  ArgumentMetadata,
+  BadRequestException,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
+import { UserRole } from '@prisma/client';
+import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -8,17 +13,19 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class ValidateUserPipe implements PipeTransform {
   async transform(value: CreateUserDto, { metatype }: ArgumentMetadata) {
     const roles = {
-      "user": UserRole.USER,
-      "admin": UserRole.ADMIN
-    }
+      user: UserRole.USER,
+      admin: UserRole.ADMIN,
+    };
 
-    const parsedUser: CreateUserDto = { ...value, role: roles[value.role] }
+    const parsedUser: CreateUserDto = { ...value, role: roles[value.role] };
 
-    const userObject = plainToInstance(metatype, parsedUser)
-    const errors = await validate(userObject)
+    const userObject = plainToInstance(metatype, parsedUser);
+    const errors = await validate(userObject);
 
     if (errors.length > 0) {
-      throw new BadRequestException('The request could not be understood by the server due to malformed syntax');
+      throw new BadRequestException(
+        'The request could not be understood by the server due to malformed syntax',
+      );
     }
 
     return parsedUser;
