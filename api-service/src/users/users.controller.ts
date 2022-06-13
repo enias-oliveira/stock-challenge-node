@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
 import { ValidateUserPipe } from './parse-user.pipe';
 import { UsersService } from './users.service';
 
@@ -9,7 +9,7 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Post()
-    create(@Body(new ValidateUserPipe()) createUser: Prisma.UserCreateInput) {
+    create(@Body(new ValidateUserPipe()) createUser: CreateUserDto) {
         return this.usersService.createUser(createUser);
     }
 

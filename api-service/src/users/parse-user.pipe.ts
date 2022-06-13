@@ -7,19 +7,19 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class ValidateUserPipe implements PipeTransform {
   async transform(value: CreateUserDto, { metatype }: ArgumentMetadata) {
-    const userObject = plainToInstance(metatype, value)
-    const errors = await validate(userObject)
-
-    if (errors.length > 0) {
-      throw new BadRequestException('Validation failed');
-    }
-
     const roles = {
       "user": UserRole.USER,
       "admin": UserRole.ADMIN
     }
 
-    const parsedUser: Prisma.UserCreateInput = { ...value, role: roles[value.role] }
+    const parsedUser: CreateUserDto = { ...value, role: roles[value.role] }
+
+    const userObject = plainToInstance(metatype, parsedUser)
+    const errors = await validate(userObject)
+
+    if (errors.length > 0) {
+      throw new BadRequestException('The request could not be understood by the server due to malformed syntax');
+    }
 
     return parsedUser;
   }
