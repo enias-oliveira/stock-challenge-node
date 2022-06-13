@@ -1,5 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { catchError, of } from 'rxjs';
 import { AppService } from './app.service';
 import { HistoryService } from './history/history.service';
 import { Stat, StatService } from './stat/stat.service';
@@ -19,7 +20,15 @@ export class AppController {
 
   @MessagePattern({ cmd: 'get_stock' })
   getStock(request: GetStockRequest) {
-    return this.appService.getStock(request.quote, request.userId);
+    return this.appService.getStock(request.quote, request.userId).pipe(catchError((err: Error) => {
+      if (err.message === 'STOCK_NOT_FOUND') {
+        return of({
+          error: { errorStatus: HttpStatus.NOT_FOUND, errorMessage: 'Stock quote not found' }
+        })
+      }
+
+      throw err
+    }))
   }
 
   @MessagePattern({ cmd: 'get_history' })

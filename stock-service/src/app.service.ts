@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { map, mergeMap, Observable } from 'rxjs';
 import { HistoryService } from './history/history.service';
 import { Stock, StooqStock } from './stooq/stooq';
@@ -22,9 +22,8 @@ export class AppService {
             return stock;
           }
 
-          throw new HttpException(
-            'Stock quote not found',
-            HttpStatus.NOT_FOUND,
+           throw new Error(
+            'STOCK_NOT_FOUND',
           );
         }),
       )

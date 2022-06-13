@@ -2,14 +2,14 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
+  HttpException, Inject,
   Post,
   Query,
   Request,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { Stock, StoredStock } from './app';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
@@ -48,15 +48,22 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Get('stock')
-  getStock(
+  async getStock(
     @Query('q') quote: string,
     @Request() req: { user: UserPayload },
-  ): Observable<Stock> {
-    return this.stockClient.send(
+  ): Promise<Stock> {
+    const response = await lastValueFrom(this.stockClient.send(
       { cmd: 'get_stock' },
       { quote, userId: req.user.id },
-    );
+    ))
+
+    if (response.error) {
+      throw new HttpException(response.error.errorMessage, response.error.errorStatus)
+    }
+
+    return response
   }
+
 
   @UseGuards(JwtAuthGuard)
   @Get('history')
@@ -66,6 +73,6 @@ export class AppController {
 
   @Get('stat')
   getStat(): Observable<any> {
-    return this.stockClient.send({ cmd: 'get_stat' }, '');
+    return this.stockClient.send({ cmd: 'get_stat' }, '')
   }
 }
