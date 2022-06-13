@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import * as generator from 'generate-password';
@@ -37,11 +37,20 @@ export class UsersService {
     const password = generator.generate({ length: 32 })
     const passwordHash = bcrypt.hashSync(password, 10)
 
-    const { email } = await this.prisma.user.create({
-      data: { ...data, passwordHash }
-    });
+    try {
+      const { email } = await this.prisma.user.create({
+        data: { ...data, passwordHash }
+      });
 
-    return { email, password }
+      return { email, password }
+
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new HttpException('This email is already in use. Please use another one', HttpStatus.BAD_REQUEST)
+      }
+
+      throw err
+    }
   }
 
   async updateUser(params: {

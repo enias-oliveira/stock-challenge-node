@@ -8,11 +8,6 @@ export class UsersController {
 
     constructor(private readonly usersService: UsersService) { }
 
-    @Post()
-    create(@Body(new ValidateUserPipe()) createUser: CreateUserDto) {
-        return this.usersService.createUser(createUser);
-    }
-
     @Get()
     findAll() {
         return this.usersService.users({});
