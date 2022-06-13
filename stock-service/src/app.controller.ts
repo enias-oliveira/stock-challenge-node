@@ -1,12 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() { }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @MessagePattern({ cmd: 'get_stock' })
+  getStock(_quote: string): any {
+    return {
+      "name": "APPLE",
+      "symbol": "AAPL.US",
+      "open": 123.66,
+      "high": 123.66,
+      "low": 122.49,
+      "close": 123
+    }
   }
 }
