@@ -23,7 +23,7 @@ export class AppController {
   constructor(
     private authService: AuthService,
     @Inject('STOCK_SERVICE') private stockClient: ClientProxy,
-  ) {}
+  ) { }
 
   @Post('register')
   register(
@@ -62,5 +62,10 @@ export class AppController {
   @Get('history')
   getHistory(@Request() req: { user: UserPayload }): Observable<StoredStock[]> {
     return this.stockClient.send({ cmd: 'get_history' }, req.user.id);
+  }
+
+  @Get('stat')
+  getStat(): Observable<any> {
+    return this.stockClient.send({ cmd: 'get_stat' }, '');
   }
 }
