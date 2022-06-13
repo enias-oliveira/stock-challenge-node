@@ -4,6 +4,8 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { ValidateUserPipe } from './users/parse-user.pipe';
+import { UserCredentials, UserPayload } from './users/users';
+
 
 @Controller()
 export class AppController {
@@ -12,19 +14,19 @@ export class AppController {
   ) { }
 
   @Post('register')
-  register(@Body(new ValidateUserPipe()) createUserDto: CreateUserDto): any {
+  register(@Body(new ValidateUserPipe()) createUserDto: CreateUserDto): Promise<UserCredentials> {
     return this.authService.register(createUserDto)
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req: { user: any; }): Promise<any> {
+  async login(@Request() req: { user: UserPayload }): Promise<{ access_token: string }> {
     return this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req: { user: any; }): any {
+  getProfile(@Request() req: { user: UserPayload }): UserPayload {
     return req.user;
   }
 }
