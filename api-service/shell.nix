@@ -12,7 +12,7 @@ mkShell {
     export PGDATA=$PWD/db
     export PGHOST=$PWD/postgres
     export PGDATABASE=api-service-dev
-    export PGPORT=15432
+    export PGPORT=25432
     export USER=postgres
     export PASSWORD=postgres
 
