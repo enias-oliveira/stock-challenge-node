@@ -3,7 +3,7 @@ import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { CreateUserDto } from './users/dto/create-user.dto';
-import { ValidateUserPipe } from './users/parse-user.pipe';
+import { ValidateUserPipe } from './users/validate-user.pipe';
 import { UserCredentials, UserPayload } from './users/users';
 
 
