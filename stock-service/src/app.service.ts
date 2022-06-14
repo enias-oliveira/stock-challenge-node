@@ -9,24 +9,11 @@ export class AppService {
   constructor(
     private stooqService: StooqService,
     private historyService: HistoryService,
-  ) {}
+  ) { }
 
   getStock(quote: string, userId: number): Observable<Stock> {
     return this.stooqService
       .fetchStock(quote)
-      .pipe(
-        map((stooqStock: StooqStock) => {
-          const { volume, date, time, ...stock } = stooqStock;
-
-          if (stock.name) {
-            return stock;
-          }
-
-           throw new Error(
-            'STOCK_NOT_FOUND',
-          );
-        }),
-      )
       .pipe(
         mergeMap(async (rawStockData) => {
           return await this.historyService.registerStockQuoteRequest({
