@@ -4,7 +4,6 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,14 +11,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class ValidateUserPipe implements PipeTransform {
   async transform(value: CreateUserDto, { metatype }: ArgumentMetadata) {
-    const roles = {
-      user: UserRole.USER,
-      admin: UserRole.ADMIN,
-    };
-
-    const parsedUser: CreateUserDto = { ...value, role: roles[value.role] };
-
-    const userObject = plainToInstance(metatype, parsedUser);
+    const userObject = plainToInstance(metatype, value);
     const errors = await validate(userObject);
 
     if (errors.length > 0) {
@@ -28,6 +20,6 @@ export class ValidateUserPipe implements PipeTransform {
       );
     }
 
-    return parsedUser;
+    return userObject;
   }
 }
