@@ -13,7 +13,7 @@ import { LocalStrategy } from './passport/local.strategy';
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET_KEY'),
+        secret: configService.get('JWT_SECRET_KEY', 'NOT_SAFE_DEV_SECRET_KEY'),
         signOptions: { expiresIn: '1h' },
       }),
       inject: [ConfigService],
@@ -22,4 +22,4 @@ import { LocalStrategy } from './passport/local.strategy';
   exports: [AuthService],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })
-export class AuthModule {}
+export class AuthModule { }

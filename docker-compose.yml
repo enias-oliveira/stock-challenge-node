@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  api-service_db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=database
+    restart: always
+    ports:
+      - 55432:5432
+    volumes:
+      - api-service_db:/var/lib/postgresql/data
+    container_name: api-service_db
+
+  stock-service_db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=database
+      - PGPORT=5433
+    restart: always
+    ports:
+      - 65432:5433
+    volumes:
+      - stock-service_db:/var/lib/postgresql/data
+    container_name: stock-service_db
+
+  api-service_nest:
+    container_name: api-service
+    build:
+      context: ./api-service
+      dockerfile: Dockerfile
+    environment:
+      - STOCK_SERVICE_PORT=3001
+      - STOCK_SERVICE_HOST=stock-service_nest
+      - DATABASE_URL=postgresql://postgres:postgres@api-service_db:5432/database
+      - PORT=3000
+    ports:
+      - 33000:3000
+    depends_on:
+      - api-service_db
+    command: bash -c "./wait-for-it.sh api-service_db:5432 -- npm run start:migrate:prod"
+
+  stock-service_nest:
+    container_name: stock-service
+    build:
+      context: ./stock-service
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@stock-service_db:5433/database
+      - PORT=3001
+      - HOST=stock-service_nest
+    ports:
+      - 33001:3001
+    depends_on:
+      - stock-service_db
+    command: bash -c "./wait-for-it.sh stock-service_db:5433 -- npm run start:migrate:prod"
+
+volumes:
+  api-service_db:
+    name: api-service_db
+  stock-service_db:
+    name: stock-service_db

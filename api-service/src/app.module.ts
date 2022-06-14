@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
@@ -10,9 +10,18 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    ClientsModule.register([
-      { name: 'STOCK_SERVICE', transport: Transport.TCP },
-    ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'STOCK_SERVICE',
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get<string>("STOCK_SERVICE_HOST"),
+            port: configService.get<number>("STOCK_SERVICE_PORT")
+          }
+        }),
+      }]),
   ],
   controllers: [AppController],
 })
