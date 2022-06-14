@@ -17,7 +17,8 @@ export class AuthService {
     password: string,
   ): Promise<UserPayload | null> {
     const user = await this.usersService.user({ email });
-    const isPasswordValid = compare(password, user.passwordHash);
+    const isPasswordValid = await compare(password, user.passwordHash);
+
 
     if (isPasswordValid) {
       const { passwordHash, ...result } = user;
