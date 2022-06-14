@@ -7,6 +7,8 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . .
 
+ENV NODE_ENV production
+
 # Install app dependencies
 RUN npm ci
 
