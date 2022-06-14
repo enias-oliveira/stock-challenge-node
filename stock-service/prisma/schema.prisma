@@ -10,14 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  admin
-  user
-}
-
-model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  role         Role @default(user)
-  passwordHash String
+model StockQuoteRequest {
+  id     Int      @id @default(autoincrement())
+  userId Int
+  date   DateTime @default(now())
+  name   String
+  symbol String
+  open   Float
+  high   Float
+  low    Float
+  close  Float
 }
