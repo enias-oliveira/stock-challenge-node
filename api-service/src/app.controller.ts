@@ -2,8 +2,9 @@ import {
   Body,
   Controller,
   Get,
-  HttpException, Inject,
-  Post,
+  HttpCode,
+  HttpException, Inject, Post,
+  Put,
   Query,
   Request,
   UseGuards
@@ -79,5 +80,11 @@ export class AppController {
   @Get('stat')
   getStat(): Observable<any> {
     return this.stockClient.send({ cmd: 'get_stat' }, '')
+  }
+
+  @HttpCode(201)
+  @Put('password')
+  async updatePassword(@Query('email') email: string) {
+    return this.authService.reset_password(email)
   }
 }

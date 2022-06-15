@@ -38,6 +38,9 @@ services:
       - STOCK_SERVICE_HOST=stock-service_nest
       - DATABASE_URL=postgresql://postgres:postgres@api-service_db:5432/database
       - PORT=3000
+      - MAILGUN_API_KEY=${MAILGUN_API_KEY}
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-FALLBACK_NOT_SAFE_DEV_SECRET_KEY}
     ports:
       - 33000:3000
     depends_on:
