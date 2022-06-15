@@ -5,9 +5,9 @@ import { compare, hash } from 'bcrypt';
 import { generate as generatePassword } from 'generate-password';
 import * as mailgun from 'mailgun-js';
 
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UserPayload } from 'src/users/users';
-import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UserPayload } from '../users/users';
+import { UsersService } from '../users/users.service';
 import { getResetPasswordEmailTemplate } from './helper';
 
 @Injectable()
