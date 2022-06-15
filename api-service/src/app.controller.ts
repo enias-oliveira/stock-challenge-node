@@ -10,7 +10,7 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { lastValueFrom, Observable } from 'rxjs';
 import { Stock, StoredStock } from './app';
@@ -55,11 +55,7 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer with JWT Token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: ProfileResponseDto,
     description: 'Returns profile data enconded in JWT token'
@@ -78,11 +74,8 @@ export class AppController {
     return this.authService.reset_password(email)
   }
 
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer with JWT Token',
-    required: true,
-  })
+
+  @ApiBearerAuth()
   @ApiQuery({ name: 'q', type: 'string', example: 'aapl.us' })
   @ApiOkResponse({ type: StockResponseDto, description: 'Returns data of requested stock quote' })
   @UseGuards(JwtAuthGuard)
@@ -103,11 +96,7 @@ export class AppController {
     return response
   }
 
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer with JWT Token',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [StockResponseDto], description: 'Returns all Stock request by user in JWT Token' })
   @UseGuards(JwtAuthGuard)
   @Get('history')
@@ -115,11 +104,7 @@ export class AppController {
     return this.stockClient.send({ cmd: 'get_history' }, req.user.id);
   }
 
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer with JWT Token that contains the admin role',
-    required: true,
-  })
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: [StockStatDto],
     description: 'Returns the five most requested stocks',
