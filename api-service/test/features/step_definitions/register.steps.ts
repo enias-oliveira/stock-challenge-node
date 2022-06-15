@@ -24,6 +24,7 @@ export class RegisterSteps {
 
   @before()
   public async before(): Promise<void> {
+    console.log(process.env.DATABASE_URL);
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();

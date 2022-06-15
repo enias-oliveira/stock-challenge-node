@@ -3,7 +3,7 @@
 with pkgs;
 
 mkShell {
-  buildInputs = [ nodejs postgresql ];
+  buildInputs = [ nodejs postgresql docker docker-compose ];
   shellHook = ''
     export PATH="$PWD/node_modules/.bin/:$PATH"
 
