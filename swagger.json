@@ -1,0 +1,380 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/register": {
+      "post": {
+        "operationId": "AppController_register",
+        "parameters": [
+
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "operationId": "AppController_login",
+        "parameters": [
+
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns access token that expires in 1 hour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "operationId": "AppController_getProfile",
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns profile data enconded in JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/password": {
+      "put": {
+        "operationId": "AppController_updatePassword",
+        "parameters": [
+          {
+            "name": "email",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User was found and new password will be sent to registered e-mail"
+          }
+        }
+      }
+    },
+    "/stock": {
+      "get": {
+        "operationId": "AppController_getStock",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "example": "aapl.us",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns data of requested stock quote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/history": {
+      "get": {
+        "operationId": "AppController_getHistory",
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all Stock request by user in JWT Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StockResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
+      }
+    },
+    "/stat": {
+      "get": {
+        "operationId": "AppController_getStat",
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the five most requested stocks (Requires admin role)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StockStatDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User associated to token does not contain admin role"
+          }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Jobsity - Node Challenge",
+    "description": "The Node Challenge API description for Jobsity",
+    "version": "1.0",
+    "contact": {
+
+    }
+  },
+  "tags": [
+
+  ],
+  "servers": [
+
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "user"
+            ],
+            "default": "user"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "RegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "ProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "minimum": 1
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "user"
+            ],
+            "default": "user"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "role"
+        ]
+      },
+      "StockResponseDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Date of Quote request formatted in ISO timestamp",
+            "example": "2022-06-14T10:32:10.201Z"
+          },
+          "name": {
+            "type": "string",
+            "example": "ALLIANCEBERNSTEIN HOLDING\r"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "AB.US"
+          },
+          "open": {
+            "type": "number",
+            "example": 41.36
+          },
+          "high": {
+            "type": "number",
+            "example": 41.94
+          },
+          "low": {
+            "type": "number",
+            "example": 40.05
+          },
+          "close": {
+            "type": "number",
+            "example": 40.55
+          }
+        },
+        "required": [
+          "date",
+          "name",
+          "symbol",
+          "open",
+          "high",
+          "low",
+          "close"
+        ]
+      },
+      "StockStatDto": {
+        "type": "object",
+        "properties": {
+          "stock": {
+            "type": "string",
+            "example": "aaa.us"
+          },
+          "times_requested": {
+            "type": "number",
+            "example": 3
+          }
+        },
+        "required": [
+          "stock",
+          "times_requested"
+        ]
+      }
+    }
+  }
+}
