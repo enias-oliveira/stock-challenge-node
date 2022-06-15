@@ -4,7 +4,27 @@
 
 The Node Challenge API description for Jobsity
 
-Base URLs:
+- Base URLs: http://localhost:3000/
+- Swagger UI: http://localhost:3000/api
+ 
+# Development Environment
+
+## Prerequisites
+- docker
+- docker-compose
+
+Enviroment variables can be set in the .env file (see .env.example).
+
+A JWT Secret key is optional.
+
+You will also need ApiKey and Domain from Mailgun to send e-mail.
+
+
+To run the whole application: 
+```shell
+docker-compose up
+```
+
 
 # Authentication
 
