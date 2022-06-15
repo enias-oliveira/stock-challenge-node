@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { CreateUserDto } from './dto/create-user.dto';
+import { RegisterDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class ValidateUserPipe implements PipeTransform {
-  async transform(value: CreateUserDto, { metatype }: ArgumentMetadata) {
+  async transform(value: RegisterDto, { metatype }: ArgumentMetadata) {
     const userObject = plainToInstance(metatype, value);
     const errors = await validate(userObject);
 

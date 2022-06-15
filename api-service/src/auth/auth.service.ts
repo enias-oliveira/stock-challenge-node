@@ -5,9 +5,9 @@ import { compare, hash } from 'bcrypt';
 import { generate as generatePassword } from 'generate-password';
 import * as mailgun from 'mailgun-js';
 
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UserPayload } from 'src/users/users';
 import { UsersService } from 'src/users/users.service';
+import { RegisterDto } from './auth.dto';
 import { getResetPasswordEmailTemplate } from './helper';
 
 @Injectable()
@@ -41,8 +41,8 @@ export class AuthService {
     };
   }
 
-  async register(createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  async register(registerDto: RegisterDto) {
+    return this.usersService.createUser(registerDto);
   }
 
   async reset_password(email: string) {
