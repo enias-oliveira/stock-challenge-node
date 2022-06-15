@@ -4,8 +4,10 @@
 
 The Node Challenge API description for Jobsity
 
-- Base URLs: http://localhost:3000/
-- Swagger UI: http://localhost:3000/api
+![Swagger-UI](./swagger-ui.png)
+
+- Base URLs: http://localhost:33000/
+- Swagger UI: http://localhost:33000/api
  
 # Development Environment
 
