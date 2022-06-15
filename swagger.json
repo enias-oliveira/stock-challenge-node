@@ -65,15 +65,7 @@
       "get": {
         "operationId": "AppController_getProfile",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Bearer with JWT Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+
         ],
         "responses": {
           "200": {
@@ -86,7 +78,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
       }
     },
     "/password": {
@@ -121,15 +120,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Bearer with JWT Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -143,22 +133,21 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
       }
     },
     "/history": {
       "get": {
         "operationId": "AppController_getHistory",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Bearer with JWT Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+
         ],
         "responses": {
           "200": {
@@ -174,26 +163,25 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
       }
     },
     "/stat": {
       "get": {
         "operationId": "AppController_getStat",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Bearer with JWT Token that contains the admin role",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+
         ],
         "responses": {
           "200": {
-            "description": "Returns the five most requested stocks",
+            "description": "Returns the five most requested stocks (Requires admin role)",
             "content": {
               "application/json": {
                 "schema": {
@@ -208,7 +196,14 @@
           "403": {
             "description": "User associated to token does not contain admin role"
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": [
+
+            ]
+          }
+        ]
       }
     }
   },
@@ -227,6 +222,13 @@
 
   ],
   "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
     "schemas": {
       "RegisterDto": {
         "type": "object",

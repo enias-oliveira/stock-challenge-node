@@ -1,26 +1,14 @@
----
-title: Jobsity - Node Challenge v1.0
-language_tabs:
-  - shell: Shell
-language_clients:
-  - shell: ""
-toc_footers: []
-includes: []
-search: true
-highlight_theme: darkula
-headingLevel: 2
-
----
-
 <!-- Generator: Widdershins v4.0.1 -->
 
 <h1 id="jobsity-node-challenge">Jobsity - Node Challenge v1.0</h1>
 
-> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
-
 The Node Challenge API description for Jobsity
 
 Base URLs:
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer, JWT Token
 
 <h1 id="jobsity-node-challenge-default">Default</h1>
 
@@ -137,17 +125,11 @@ This operation does not require authentication
 # You can also use wget
 curl -X GET /profile \
   -H 'Accept: application/json' \
-  -H 'Authorization: string'
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 `GET /profile`
-
-<h3 id="appcontroller_getprofile-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|Authorization|header|string|true|Bearer with JWT Token|
 
 > Example responses
 
@@ -167,8 +149,9 @@ curl -X GET /profile \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns profile data enconded in JWT token|[ProfileResponseDto](#schemaprofileresponsedto)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
 </aside>
 
 ## AppController_updatePassword
@@ -211,7 +194,7 @@ This operation does not require authentication
 # You can also use wget
 curl -X GET /stock?q=aapl.us \
   -H 'Accept: application/json' \
-  -H 'Authorization: string'
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -222,7 +205,6 @@ curl -X GET /stock?q=aapl.us \
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |q|query|string|true|none|
-|Authorization|header|string|true|Bearer with JWT Token|
 
 > Example responses
 
@@ -246,8 +228,9 @@ curl -X GET /stock?q=aapl.us \
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns data of requested stock quote|[StockResponseDto](#schemastockresponsedto)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
 </aside>
 
 ## AppController_getHistory
@@ -260,17 +243,11 @@ This operation does not require authentication
 # You can also use wget
 curl -X GET /history \
   -H 'Accept: application/json' \
-  -H 'Authorization: string'
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 `GET /history`
-
-<h3 id="appcontroller_gethistory-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|Authorization|header|string|true|Bearer with JWT Token|
 
 > Example responses
 
@@ -311,8 +288,9 @@ Status Code **200**
 |» low|number|true|none|none|
 |» close|number|true|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
 </aside>
 
 ## AppController_getStat
@@ -325,17 +303,11 @@ This operation does not require authentication
 # You can also use wget
 curl -X GET /stat \
   -H 'Accept: application/json' \
-  -H 'Authorization: string'
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 `GET /stat`
-
-<h3 id="appcontroller_getstat-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|Authorization|header|string|true|Bearer with JWT Token that contains the admin role|
 
 > Example responses
 
@@ -354,7 +326,7 @@ curl -X GET /stat \
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns the five most requested stocks|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns the five most requested stocks (Requires admin role)|Inline|
 |403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|User associated to token does not contain admin role|None|
 
 <h3 id="appcontroller_getstat-responseschema">Response Schema</h3>
@@ -367,8 +339,9 @@ Status Code **200**
 |» stock|string|true|none|none|
 |» times_requested|number|true|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
 </aside>
 
 # Schemas

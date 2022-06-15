@@ -10,7 +10,7 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiQuery, ApiSecurity } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { lastValueFrom, Observable } from 'rxjs';
 import { Stock, StoredStock } from './app';
@@ -107,7 +107,7 @@ export class AppController {
   @ApiBearerAuth()
   @ApiOkResponse({
     type: [StockStatDto],
-    description: 'Returns the five most requested stocks',
+    description: 'Returns the five most requested stocks (Requires admin role)',
   })
   @ApiForbiddenResponse({ description: 'User associated to token does not contain admin role' })
   @UseGuards(RolesGuard)
