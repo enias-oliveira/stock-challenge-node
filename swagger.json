@@ -241,12 +241,12 @@
             "enum": [
               "admin",
               "user"
-            ],
-            "default": "user"
+            ]
           }
         },
         "required": [
-          "email"
+          "email",
+          "role"
         ]
       },
       "RegisterResponseDto": {

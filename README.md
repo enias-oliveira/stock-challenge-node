@@ -32,8 +32,6 @@ docker-compose up
 
 - HTTP Authentication, scheme: bearer, JWT Token
 
-<h1 id="jobsity-node-challenge-default">Default</h1>
-
 ## AppController_register
 
 <a id="opIdAppController_register"></a>
@@ -388,7 +386,7 @@ bearer
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |email|string|true|none|none|
-|role|string|false|none|none|
+|role|string|true|none|none|
 
 #### Enumerated Values
 
