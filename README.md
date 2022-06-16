@@ -8,12 +8,19 @@ The Node Challenge API description for Jobsity
 
 - Base URLs: http://localhost:33000/
 - Swagger UI: http://localhost:33000/api
- 
-# Development Environment
 
-## Prerequisites
-- docker
-- docker-compose
+## Completed Bonuses
+
+- Use JWT instead of basic authentication for endpoints.
+- Use containers to orchestrate the services.
+- Use OpenAPI/Swagger to document the API.
+- Add endpoint to reset user password sending an email with the new password.
+
+I tried to implement test using Cucumber for BDD ( Wanted to try it out)
+
+Had trouble setting it up to work with microservices, so maybe next time.
+
+# Install
 
 Enviroment variables can be set in the .env file (see .env.example).
 
@@ -21,12 +28,14 @@ A JWT Secret key is optional.
 
 You will also need ApiKey and Domain from Mailgun to send e-mail.
 
+## Prerequisites
+- docker
+- docker-compose
 
 To run the whole application: 
 ```shell
 docker-compose up
 ```
-
 
 # Authentication
 
