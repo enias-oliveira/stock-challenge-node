@@ -1,0 +1,15 @@
+Dockerfile
+.dockerignore
+
+node_modules
+npm-debug.log
+.log
+
+dist
+
+db
+postgres
+shell.nix
+
+.env
+.envrc
