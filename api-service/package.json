@@ -24,7 +24,7 @@
     "docker:up": "docker-compose -f docker-compose.test.yml up -d",
     "docker:down": "docker-compose -f docker-compose.test.yml down",
     "test:cucumber": "cucumber-js -p default --exit",
-    "test:setup:bdd": "npm run docker:up && prisma migrate deploy && npm run test:cucumber",
+    "test:setup:bdd": "npm run docker:up && sleep 5 && prisma migrate deploy && npm run test:cucumber",
     "test:bdd": "DATABASE_URL='postgresql://prisma:prisma@localhost:6543/tests' npm run test:setup:bdd; npm run docker:down"
   },
   "dependencies": {

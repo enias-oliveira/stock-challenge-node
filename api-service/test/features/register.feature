@@ -3,7 +3,5 @@ Feature: Auth module
 
   Scenario: Register new user
     Given I have an e-mail that has not been registered before
-    When I register with:
-        | email | "hubber" |
-        | role  | "user"   |
+    When I register with user role
     Then I should receive a password of 32 characters long
