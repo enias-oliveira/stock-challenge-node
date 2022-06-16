@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  api-service_nest:
+    build:
+      dockerfile: Dockerfile.dev
+    command: bash -c "./wait-for-it.sh api-service_db:5432 -- npm run start:migrate:dev"
+    volumes:
+      - ./api-service/node_modules:/app/node_modules
+      - ./api-service/src:/app/src
+
+  stock-service_nest:
+    build:
+      dockerfile: Dockerfile.dev
+    command: bash -c "./wait-for-it.sh stock-service_db:5432 -- npm run start:migrate:dev"
+    volumes:
+      - ./stock-service/node_modules:/app/node_modules
+      - ./stock-service/src:/app/src

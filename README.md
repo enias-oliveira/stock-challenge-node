@@ -1,103 +1,555 @@
-<div style="text-align: center">
-    <img src="jobsity.png"/>
-</div>
+<!-- Generator: Widdershins v4.0.1 -->
 
-# Node.js Challenge
+<h1 id="jobsity-node-challenge">Jobsity - Node Challenge v1.0</h1>
 
-## Description
-This project is designed to test your knowledge of back-end web technologies, specifically in Node.js, REST APIs, and
-decoupled services (microservices).
+The Node Challenge API description for Jobsity
 
-## Assignment
-The goal of this exercise is to create a simple API with Node.js, using or not any framework of your choice, to allow users to query
-[stock quotes](https://www.investopedia.com/terms/s/stockquote.asp). It is scaffolded with two Express apps, but you can
-use another backend Node.js framework of your preference.
+![Swagger-UI](./swagger-ui.png)
 
-The project consists of two separate services:
-* A user-facing API that will receive requests from registered users asking for quote information. 
-* An internal stock service that queries external APIs to retrieve the requested quote information.
+- Base URLs: http://localhost:33000/
+- Swagger UI: http://localhost:33000/api
 
-## Minimum requirements
-### API service
-* Endpoints in the API service should require authentication (no anonymous requests should be allowed). Each request
-  should be authenticated via Basic Authentication.
-  * To register a user the API service must receive a request with an email address and return a randomized password,
-    like this:
+## Completed Bonuses
 
-    Request example:
+- Use JWT instead of basic authentication for endpoints.
+- Use containers to orchestrate the services.
+- Use OpenAPI/Swagger to document the API.
+- Add endpoint to reset user password sending an email with the new password.
 
-    `POST /register`
-    ```
-      { "email": "johndoe@contoso.com", "password": "bda5d07453dfde4440803cfcdec48d92" }
-    ```
+I tried to implement test using Cucumber for BDD ( Wanted to try it out)
 
-* When a user requests a stock quote (calls the stock endpoint in the api service), if it exists, it should be saved and
-  related to that user in the database.
-  * The response returned by the API service should be like this:
-  
-    `GET /stock?q=aapl.us`
-    ```
-      {
-      "name": "APPLE",
-      "symbol": "AAPL.US",
-      "open": 123.66,
-      "high": 123.66,
-      "low": 122.49,
-      "close": 123
-      }
-    ```
-  
-  * A user can get their history of queries made to the api service by hitting the history endpoint. The endpoint should
-    return the list of entries saved in the database, showing the latest entries first:
-    
-    `GET /history`
-    ```
-    [
-        {"date": "2021-04-01T19:20:30Z", "name": "APPLE", "symbol": "AAPL.US", "open": "123.66", "high": 123.66, "low": 122.49, "close": "123"},
-        {"date": "2021-03-25T11:10:55Z", "name": "APPLE", "symbol": "AAPL.US", "open": "121.10", "high": 123.66, "low": 122, "close": "122"},
-        ...
-    ]
-    ```
-* A super user (and only super users) can hit the stats endpoint, which will return the top 5 most requested stocks:
+Had trouble setting it up to work with microservices, so maybe next time.
 
-  `GET /stats`
-  ```
-  [
-      {"stock": "aapl.us", "times_requested": 5},
-      {"stock": "msft.us", "times_requested": 2},
-      ...
-  ]
-  ```
-* All endpoint responses should be in JSON format.
+# Install
 
-### Stock service
-* Assume this is an internal service, so requests to endpoints in this service don't need to be authenticated.
-* When a stock request is received, this service should query an external API to get the stock information. For this
-  challenge, use this API: `https://stooq.com/q/l/?s={stock_code}&f=sd2t2ohlcvn&h&e=csv`.
-* Note that `{stock_code}` above is a parameter that should be replaced with the requested stock code.
-* You can see a list of available stock codes here: https://stooq.com/t/?i=518
+Enviroment variables can be set in the .env file (see .env.example).
 
-## Architecture
-![Architecture Diagram](architecture.png)
-1. A user makes a request asking for Nasdaq's current Stock quote: `GET /stock?q=ndq`
-2. The API service calls the stock service to retrieve the requested stock information
-3. The stock service delegates the call to the external API, parses the response, and returns the information back to the API service.
-4. The API service saves the response from the stock service in the database.
-5. The data is formatted and returned to the user.
+A JWT Secret key is optional.
 
-## Bonuses
-The following features are optional to implement, but if you do, you'll be ranked higher in our evaluation process.
-* Add unit tests for the services.
-* Add contract/integration tests for the API service.
-* Use JWT instead of basic authentication for endpoints.
-* Use containers to orchestrate the services.
-* Use OpenAPI/Swagger to document the API.
-* Add endpoint to reset user password sending an email with the new password.
+You will also need ApiKey and Domain from Mailgun to send e-mail.
 
-## How to run the project
-* Install dependencies: `cd api-service; npm install` and `cd stock-service; npm install`
-* Start the api service: `node api-service`
-* Start the stock service: `node stock-service`
+## Prerequisites
+- docker
+- docker-compose
 
-__Important:__ If your implementation requires different steps to start the services
-(like starting a rabbitMQ consumer), document them here!
+To run the whole application: 
+```shell
+docker-compose up
+```
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer, JWT Token
+
+## AppController_register
+
+<a id="opIdAppController_register"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /register \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+```
+
+`POST /register`
+
+> Body parameter
+
+```json
+{
+  "email": "string",
+  "role": "admin"
+}
+```
+
+<h3 id="appcontroller_register-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[RegisterDto](#schemaregisterdto)|true|none|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+<h3 id="appcontroller_register-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|User successfully created|[RegisterResponseDto](#schemaregisterresponsedto)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## AppController_login
+
+<a id="opIdAppController_login"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /login \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+```
+
+`POST /login`
+
+> Body parameter
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+<h3 id="appcontroller_login-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[LoginDto](#schemalogindto)|true|none|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+<h3 id="appcontroller_login-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Returns access token that expires in 1 hour|[LoginResponseDto](#schemaloginresponsedto)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## AppController_getProfile
+
+<a id="opIdAppController_getProfile"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /profile \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /profile`
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "id": 1,
+  "email": "string",
+  "role": "admin"
+}
+```
+
+<h3 id="appcontroller_getprofile-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns profile data enconded in JWT token|[ProfileResponseDto](#schemaprofileresponsedto)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
+</aside>
+
+## AppController_updatePassword
+
+<a id="opIdAppController_updatePassword"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X PUT /password?email=string
+
+```
+
+`PUT /password`
+
+<h3 id="appcontroller_updatepassword-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|email|query|string|true|none|
+
+<h3 id="appcontroller_updatepassword-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|User was found and new password will be sent to registered e-mail|None|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## AppController_getStock
+
+<a id="opIdAppController_getStock"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /stock?q=aapl.us \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /stock`
+
+<h3 id="appcontroller_getstock-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|q|query|string|true|none|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "date": "2022-06-14T10:32:10.201Z",
+  "name": "ALLIANCEBERNSTEIN HOLDING\r",
+  "symbol": "AB.US",
+  "open": 41.36,
+  "high": 41.94,
+  "low": 40.05,
+  "close": 40.55
+}
+```
+
+<h3 id="appcontroller_getstock-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns data of requested stock quote|[StockResponseDto](#schemastockresponsedto)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
+</aside>
+
+## AppController_getHistory
+
+<a id="opIdAppController_getHistory"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /history \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /history`
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "date": "2022-06-14T10:32:10.201Z",
+    "name": "ALLIANCEBERNSTEIN HOLDING\r",
+    "symbol": "AB.US",
+    "open": 41.36,
+    "high": 41.94,
+    "low": 40.05,
+    "close": 40.55
+  }
+]
+```
+
+<h3 id="appcontroller_gethistory-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns all Stock request by user in JWT Token|Inline|
+
+<h3 id="appcontroller_gethistory-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[StockResponseDto](#schemastockresponsedto)]|false|none|none|
+|» date|string|true|none|Date of Quote request formatted in ISO timestamp|
+|» name|string|true|none|none|
+|» symbol|string|true|none|none|
+|» open|number|true|none|none|
+|» high|number|true|none|none|
+|» low|number|true|none|none|
+|» close|number|true|none|none|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
+</aside>
+
+## AppController_getStat
+
+<a id="opIdAppController_getStat"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET /stat \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+`GET /stat`
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "stock": "aaa.us",
+    "times_requested": 3
+  }
+]
+```
+
+<h3 id="appcontroller_getstat-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Returns the five most requested stocks (Requires admin role)|Inline|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|User associated to token does not contain admin role|None|
+
+<h3 id="appcontroller_getstat-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[StockStatDto](#schemastockstatdto)]|false|none|none|
+|» stock|string|true|none|none|
+|» times_requested|number|true|none|none|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearer
+</aside>
+
+# Schemas
+
+<h2 id="tocS_RegisterDto">RegisterDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaregisterdto"></a>
+<a id="schema_RegisterDto"></a>
+<a id="tocSregisterdto"></a>
+<a id="tocsregisterdto"></a>
+
+```json
+{
+  "email": "string",
+  "role": "admin"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|email|string|true|none|none|
+|role|string|true|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|role|admin|
+|role|user|
+
+<h2 id="tocS_RegisterResponseDto">RegisterResponseDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaregisterresponsedto"></a>
+<a id="schema_RegisterResponseDto"></a>
+<a id="tocSregisterresponsedto"></a>
+<a id="tocsregisterresponsedto"></a>
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|email|string|true|none|none|
+|password|string|true|none|none|
+
+<h2 id="tocS_LoginDto">LoginDto</h2>
+<!-- backwards compatibility -->
+<a id="schemalogindto"></a>
+<a id="schema_LoginDto"></a>
+<a id="tocSlogindto"></a>
+<a id="tocslogindto"></a>
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|email|string|true|none|none|
+|password|string|true|none|none|
+
+<h2 id="tocS_LoginResponseDto">LoginResponseDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaloginresponsedto"></a>
+<a id="schema_LoginResponseDto"></a>
+<a id="tocSloginresponsedto"></a>
+<a id="tocsloginresponsedto"></a>
+
+```json
+{
+  "access_token": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|access_token|string|true|none|none|
+
+<h2 id="tocS_ProfileResponseDto">ProfileResponseDto</h2>
+<!-- backwards compatibility -->
+<a id="schemaprofileresponsedto"></a>
+<a id="schema_ProfileResponseDto"></a>
+<a id="tocSprofileresponsedto"></a>
+<a id="tocsprofileresponsedto"></a>
+
+```json
+{
+  "id": 1,
+  "email": "string",
+  "role": "admin"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|number|true|none|none|
+|email|string|true|none|none|
+|role|string|true|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|role|admin|
+|role|user|
+
+<h2 id="tocS_StockResponseDto">StockResponseDto</h2>
+<!-- backwards compatibility -->
+<a id="schemastockresponsedto"></a>
+<a id="schema_StockResponseDto"></a>
+<a id="tocSstockresponsedto"></a>
+<a id="tocsstockresponsedto"></a>
+
+```json
+{
+  "date": "2022-06-14T10:32:10.201Z",
+  "name": "ALLIANCEBERNSTEIN HOLDING\r",
+  "symbol": "AB.US",
+  "open": 41.36,
+  "high": 41.94,
+  "low": 40.05,
+  "close": 40.55
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|date|string|true|none|Date of Quote request formatted in ISO timestamp|
+|name|string|true|none|none|
+|symbol|string|true|none|none|
+|open|number|true|none|none|
+|high|number|true|none|none|
+|low|number|true|none|none|
+|close|number|true|none|none|
+
+<h2 id="tocS_StockStatDto">StockStatDto</h2>
+<!-- backwards compatibility -->
+<a id="schemastockstatdto"></a>
+<a id="schema_StockStatDto"></a>
+<a id="tocSstockstatdto"></a>
+<a id="tocsstockstatdto"></a>
+
+```json
+{
+  "stock": "aaa.us",
+  "times_requested": 3
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|stock|string|true|none|none|
+|times_requested|number|true|none|none|
+
